@@ -14,6 +14,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
+            app:title=" Національна поліція"
+            app:logo="@mipmap/ic_gerald"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <android.support.design.widget.TabLayout

@@ -16,11 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.CustomViewIconTextTabsActivity"
-            android:label="@string/title_activity_custom_view_icon_text_tabs"
-            android:parentActivityName=".activity.MainActivity" >
-        </activity>
     </application>
 
 </manifest>

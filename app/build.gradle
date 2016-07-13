@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "info.androidhive.materialtabs"
+        applicationId "ic2h.policeassistance.main"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
