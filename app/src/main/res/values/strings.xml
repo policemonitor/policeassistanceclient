@@ -5,6 +5,8 @@
     <string name="two">ЗАЯВА</string>
     <string name="three">ВИКЛИК</string>
 
+    <string name="quick_call">Екстрений виклик</string>
+
     <string name="btn_icon_text_tabs">Icon &amp; Text Tabs</string>
     <string name="btn_icon_tabs">Only Icon Tabs</string>
     <string name="btn_pinned_top_tabs">Pinned To Top Tabs</string>
@@ -17,6 +19,9 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Налаштування</string>
+    <string name="description">Швидкий виклик поліції</string>
+    <string name="hint_quick_call">Натисніть для виклику</string>
+    <string name="police_number">102</string>
 
 
 </resources>
