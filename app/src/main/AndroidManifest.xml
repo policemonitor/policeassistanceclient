@@ -17,26 +17,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ScrollableTabsActivity"
-            android:label="@string/title_activity_scrollable_tabs"
-            android:parentActivityName=".activity.MainActivity" >
-        </activity>
-        <activity
-            android:name=".activity.SimpleTabsActivity"
-            android:label="@string/title_activity_simple_tabs"
-            android:parentActivityName=".activity.MainActivity" >
-        </activity>
-        <activity
-            android:name=".activity.IconTextTabsActivity"
-            android:label="@string/title_activity_icon_text_tabs"
-            android:parentActivityName=".activity.MainActivity" >
-        </activity>
-        <activity
-            android:name=".activity.IconTabsActivity"
-            android:label="@string/title_activity_icon_tabs"
-            android:parentActivityName=".activity.MainActivity" >
-        </activity>
-        <activity
             android:name=".activity.CustomViewIconTextTabsActivity"
             android:label="@string/title_activity_custom_view_icon_text_tabs"
             android:parentActivityName=".activity.MainActivity" >
