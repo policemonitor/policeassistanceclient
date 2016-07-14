@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import at.markushi.ui.CircleButton;
 import info.androidhive.materialtabs.R;
 
 public class ThreeFragment extends Fragment{
@@ -30,20 +29,32 @@ public class ThreeFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_three, container, false);
+        View root_view =  inflater.inflate(R.layout.fragment_three, container, false);
+        ImageButton emergency_button = (ImageButton)root_view.findViewById(R.id.imageButtonMakeCall);
 
+        ImageButton.OnClickListener listener = new ImageButton.OnClickListener() {
+            @Override
+            public void onClick(View arg0)
+            {
+                onMakeCallButtonClick();
+            }
+        };
+        emergency_button.setOnClickListener(listener);
+        return root_view;
     }
-
-    public void onClick(View view) {
-        Intent make_call = new Intent(Intent.ACTION_CALL, Uri.parse(TEST_NUMBER));
-        try{
-
-            Toast.makeText(getActivity(), "Викликаємо поліцію", Toast.LENGTH_SHORT).show();
+    public void onMakeCallButtonClick() {
+        Intent make_call = new Intent(Intent.ACTION_CALL, Uri.fromParts("tel", TEST_NUMBER, null));
+        try {
+            Toast toast = Toast.makeText(getContext(),
+                    "Викликаємо поліцію", Toast.LENGTH_SHORT);
+            toast.show();
             startActivity(make_call);
         }
 
         catch (android.content.ActivityNotFoundException ex){
-            Toast.makeText(getActivity(),"Виклик з данного пристрою неможливий!",Toast.LENGTH_SHORT).show();
+            Toast toast = Toast.makeText(getContext(),
+                    "Неможливо виконати виклик", Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 }
