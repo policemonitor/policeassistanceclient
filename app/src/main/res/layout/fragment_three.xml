@@ -6,53 +6,70 @@
     tools:context="info.androidhive.materialtabs.fragments.ThreeFragment"
     android:clickable="true">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/quick_call"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:id="@+id/main_text_quick_call"
-        android:textColor="@color/abc_primary_text_disable_only_material_light"
-        android:layout_above="@+id/textView2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-
 
     <ImageButton
         android:layout_width="fill_parent"
-        android:layout_height="120dp"
+        android:layout_height="80dp"
         android:id="@+id/imageButtonMakeCall"
         android:src="@mipmap/ic_do_call"
         android:background="@color/material_deep_teal_500"
-        android:contentDescription="Button to call the police"
+        android:contentDescription="@string/button_to_call_the_police"
+        android:foregroundGravity="bottom"
+        android:clickable="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:foregroundGravity="bottom"
-        android:clickable="true" />
+        android:layout_alignParentStart="true" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:id="@+id/space"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/hint_quick_call"
-        android:id="@+id/textView2"
-        android:paddingTop="20dp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/police_number"
-        android:id="@+id/textView"
-        android:textSize="96dp"
-        android:textColor="#646464"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true" />
+        android:id="@+id/hint_text_police_number"
+        android:textSize="96sp"
+        android:textColor="@color/button_material_dark"
+        android:layout_above="@+id/imageButtonMakeCall"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:gravity="bottom|center_horizontal" />
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:id="@+id/linearLayout"
+        android:layout_below="@+id/space"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:text="@string/quick_call"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:id="@+id/main_text_quick_call"
+            android:textColor="@color/abc_primary_text_disable_only_material_light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/hint_quick_call"
+            android:id="@+id/hint_text_quick_call"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" />
+
+    </LinearLayout>
+
+    -
 </RelativeLayout>
