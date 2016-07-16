@@ -3,17 +3,13 @@ package info.androidhive.materialtabs.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +19,20 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.telephony.PhoneNumberUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import info.androidhive.materialtabs.R;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 
 public class TwoFragment extends Fragment {
@@ -40,9 +46,10 @@ public class TwoFragment extends Fragment {
     private EditText location_field;
     private EditText message_field;
 
-    Button send_button;
+    private Button send_button;
     private ImageView location_button;
 
+    private String url = "http://192.168.1.8:3000/API";
 
     public TwoFragment() {
         // Required empty public constructor
@@ -57,6 +64,10 @@ public class TwoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root_view = inflater.inflate(R.layout.fragment_two, container, false);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         send_button = (Button) root_view.findViewById(R.id.send_button);
         location_button = (ImageView) root_view.findViewById(R.id.auto_location);
@@ -75,10 +86,30 @@ public class TwoFragment extends Fragment {
                             "Неможливо відіслати!\nНема Інтернет зв'язку!", Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
-                    collect_information();
-                    Toast toast = Toast.makeText(getContext(),
-                            "Відправляємо", Toast.LENGTH_SHORT);
-                    toast.show();
+                    check_information();
+                        Toast toast = Toast.makeText(getContext(),
+                                "Відправляємо", Toast.LENGTH_SHORT);
+                        toast.show();
+
+                        /*
+                            TODO
+                            - Get users coordinates
+                            - Translate users address
+                         */
+
+                        String response = postClaim(
+                                lastname_field.getText().toString(),
+                                phone_number_field.getText().toString(),
+                                theme_field.getText().toString(),
+                                longitude,
+                                latitude,
+                                message_field.getText().toString()
+                        );
+
+                        toast = Toast.makeText(getContext(),
+                                response, Toast.LENGTH_SHORT);
+                        toast.show();
+
                 }
             }
         };
@@ -90,11 +121,6 @@ public class TwoFragment extends Fragment {
                 Toast toast = Toast.makeText(getContext(),
                         "Визначаємо місцезнаходження", Toast.LENGTH_SHORT);
                 toast.show();
-                /*
-                * TODO:
-                *   Request coordinates
-                *   Transform coordinates from string
-                * */
                 toast = Toast.makeText(getContext(),
                         "Lat.: " + latitude + " Lon.: " + longitude, Toast.LENGTH_SHORT);
                 toast.show();
@@ -107,7 +133,7 @@ public class TwoFragment extends Fragment {
         return root_view;
     }
 
-    private void collect_information() {
+    private void check_information() {
         final String lastname = lastname_field.getText().toString();
         if (!isValidLastname(lastname)) {
             lastname_field.setError("Неправильний формат!");
@@ -118,11 +144,6 @@ public class TwoFragment extends Fragment {
             phone_number_field.setError("Невірний формат номеру!");
         }
 
-        final String theme = theme_field.getText().toString();
-        if (!isValidTheme(theme)) {
-            theme_field.setError("Неприпустимі символи!");
-        }
-
         final String location = location_field.getText().toString();
         if (!isValidLocation(location)) {
             location_field.setError("Порожнє поле!");
@@ -130,12 +151,12 @@ public class TwoFragment extends Fragment {
 
         final String message = message_field.getText().toString();
         if (!isValidMessage(message)) {
-            location_field.setError("Порожнє поле!");
+            message_field.setError("Порожнє поле!");
         }
     }
 
     private boolean isValidLastname(String lastname) {
-        String EMAIL_PATTERN = "^([A-ZА-Яa-zа-яІіЬыЫьЬъЪїЇҐґ]+[,.]?[ ]?|[a-z]+['-]?)+$";
+        String EMAIL_PATTERN = "^([A-ZА-Яa-zа-яІіЬыЫьъЪїЇҐґ]+[,.]?[ ]?|[a-z]+['-]?)+$";
 
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = pattern.matcher(lastname);
@@ -143,10 +164,10 @@ public class TwoFragment extends Fragment {
     }
 
     private boolean isValidPhoneNumber(String phone_number) {
-        return PhoneNumberUtils.isGlobalPhoneNumber(phone_number);
+        return PhoneNumberUtils.isGlobalPhoneNumber(phone_number) && phone_number.length() > 6;
     }
 
-    private boolean isValidTheme(String theme) {
+    private boolean isValidTheme(String theme)  {
         return theme.length() != 0;
     }
 
@@ -163,5 +184,52 @@ public class TwoFragment extends Fragment {
                     = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private String postClaim(String lastname,
+                             String phone,
+                             String theme,
+                             double lon,
+                             double lat,
+                             String message)  {
+
+        final MediaType JSON
+                = MediaType.parse("application/json; charset=utf-8");
+
+        JSONObject mainObject = new JSONObject();
+        JSONObject requestObject = new JSONObject();
+
+        try {
+            requestObject.put("lastname", lastname);
+            requestObject.put("phone", phone);
+            requestObject.put("latitude", lat);
+            requestObject.put("longitude", lon);
+            requestObject.put("theme", theme);
+            requestObject.put("text", message);
+            mainObject.put("claim", requestObject);
+        } catch (JSONException e) {
+            return "JSON Error";
+        }
+
+
+
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(JSON, mainObject.toString());
+        Request request = new Request.Builder()
+                .addHeader("Content-Type","application/json")
+                .addHeader("Accept", "application/json")
+                .url(url)
+                .post(body)
+                .build();
+
+        String response_string;
+        try {
+            okhttp3.Response response = client.newCall(request).execute();
+            response_string = response.body().string();
+        } catch (IOException e) {
+            response_string = "IO Error" + e.getMessage() + mainObject.toString();
+        }
+        return response_string;
     }
 }
