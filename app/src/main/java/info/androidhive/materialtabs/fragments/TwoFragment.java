@@ -1,6 +1,8 @@
 package info.androidhive.materialtabs.fragments;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,6 +21,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,19 +76,14 @@ public class TwoFragment extends Fragment {
             public void onClick(View arg0) {
                 if (!isOnline()) {
                     Toast toast = Toast.makeText(getContext(),
-                            "Неможливо відіслати!\nНема Інтернет зв'язку!", Toast.LENGTH_SHORT);
+                            "Неможливо відправити! Нема Інтернет зв'язку!", Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
-                    check_information();
+                    if (check_information()) {
+                        getLatLongFromAddress(location_field.getText().toString());
                         Toast toast = Toast.makeText(getContext(),
                                 "Відправляємо", Toast.LENGTH_SHORT);
                         toast.show();
-
-                        /*
-                            TODO
-                            - Get users coordinates
-                            - Translate users address
-                         */
 
                         String response = postClaim(
                                 lastname_field.getText().toString(),
@@ -94,11 +93,7 @@ public class TwoFragment extends Fragment {
                                 latitude,
                                 message_field.getText().toString()
                         );
-
-                        toast = Toast.makeText(getContext(),
-                                response, Toast.LENGTH_SHORT);
-                        toast.show();
-
+                    }
                 }
             }
         };
@@ -110,9 +105,6 @@ public class TwoFragment extends Fragment {
                 Toast toast = Toast.makeText(getContext(),
                         "Визначаємо місцезнаходження", Toast.LENGTH_SHORT);
                 toast.show();
-                toast = Toast.makeText(getContext(),
-                        "Lat.: " + latitude + " Lon.: " + longitude, Toast.LENGTH_SHORT);
-                toast.show();
 
                 location_field.setEnabled(false);
             }
@@ -122,26 +114,40 @@ public class TwoFragment extends Fragment {
         return root_view;
     }
 
-    private void check_information() {
+    private boolean check_information() {
+        boolean check_list = true;
+
         final String lastname = lastname_field.getText().toString();
         if (!isValidLastname(lastname)) {
             lastname_field.setError("Неправильний формат!");
+            check_list = false;
         }
 
         final String phone_number = phone_number_field.getText().toString();
         if (!isValidPhoneNumber(phone_number)) {
             phone_number_field.setError("Невірний формат номеру!");
+            check_list = false;
+        }
+
+        final String theme = theme_field.getText().toString();
+        if (!isValidMessage(theme)) {
+            theme_field.setError("Порожнє поле!");
+            check_list = false;
         }
 
         final String location = location_field.getText().toString();
         if (!isValidLocation(location)) {
             location_field.setError("Порожнє поле!");
+            check_list = false;
         }
 
         final String message = message_field.getText().toString();
         if (!isValidMessage(message)) {
             message_field.setError("Порожнє поле!");
+            check_list = false;
         }
+
+        return check_list;
     }
 
     private boolean isValidLastname(String lastname) {
@@ -157,7 +163,7 @@ public class TwoFragment extends Fragment {
     }
 
     private boolean isValidLocation(String location) {
-        return true;
+        return location.length() != 0;
     }
 
     private boolean isValidMessage(String message) {
@@ -196,12 +202,10 @@ public class TwoFragment extends Fragment {
             return "JSON Error";
         }
 
-
-
         OkHttpClient client = new OkHttpClient();
 
         RequestBody body = RequestBody.create(JSON, mainObject.toString());
-        String url = "http://192.168.1.8:3000/API";
+        String url = "http://192.168.15.86:3000/API";
         Request request = new Request.Builder()
                 .addHeader("Content-Type","application/json")
                 .addHeader("Accept", "application/json")
@@ -218,4 +222,25 @@ public class TwoFragment extends Fragment {
         }
         return response_string;
     }
+
+    private void getLatLongFromAddress(String address)
+    {
+        Geocoder geoCoder = new Geocoder(getContext(), Locale.getDefault());
+        try
+        {
+            List<Address> addresses = geoCoder.getFromLocationName(address , 1);
+            if (addresses.size() > 0)
+            {
+                latitude = addresses.get(0).getLatitude();
+                longitude = addresses.get(0).getLongitude();
+            }
+        }
+        catch(Exception e)
+        {
+            Toast  toast = Toast.makeText(getContext(),
+                    "Адреса не визначена", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
 }
+
