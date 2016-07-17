@@ -1,14 +1,10 @@
 package info.androidhive.materialtabs.fragments;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +15,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.telephony.PhoneNumberUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,11 +40,6 @@ public class TwoFragment extends Fragment {
     private EditText location_field;
     private EditText message_field;
 
-    private Button send_button;
-    private ImageView location_button;
-
-    private String url = "http://192.168.1.8:3000/API";
-
     public TwoFragment() {
         // Required empty public constructor
     }
@@ -69,8 +58,8 @@ public class TwoFragment extends Fragment {
                 .permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        send_button = (Button) root_view.findViewById(R.id.send_button);
-        location_button = (ImageView) root_view.findViewById(R.id.auto_location);
+        Button send_button = (Button) root_view.findViewById(R.id.send_button);
+        ImageView location_button = (ImageView) root_view.findViewById(R.id.auto_location);
 
         lastname_field = (EditText) root_view.findViewById(R.id.lastname);
         phone_number_field = (EditText) root_view.findViewById(R.id.phone_number);
@@ -167,10 +156,6 @@ public class TwoFragment extends Fragment {
         return PhoneNumberUtils.isGlobalPhoneNumber(phone_number) && phone_number.length() > 6;
     }
 
-    private boolean isValidTheme(String theme)  {
-        return theme.length() != 0;
-    }
-
     private boolean isValidLocation(String location) {
         return true;
     }
@@ -216,6 +201,7 @@ public class TwoFragment extends Fragment {
         OkHttpClient client = new OkHttpClient();
 
         RequestBody body = RequestBody.create(JSON, mainObject.toString());
+        String url = "http://192.168.1.8:3000/API";
         Request request = new Request.Builder()
                 .addHeader("Content-Type","application/json")
                 .addHeader("Accept", "application/json")
