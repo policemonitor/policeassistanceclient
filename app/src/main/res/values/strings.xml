@@ -42,6 +42,15 @@
     <string name="send_button" />
     <string name="label_send_button">НАДІСЛАТИ</string>
     <string name="text_claim">Заява</string>
+    <string name="title_activity_gps">GPSActivity</string>
+    <string name="gps_header">Навігація</string>
+    <string name="proccessing_with_gps">Proccessing with GPS</string>
+    <string name="hint_gps_waiting">Визначаємо коодинати</string>
+    <string name="longitude_hint">Довгота:</string>
+    <string name="latitude_hint">Широта:</string>
+    <string name="recieving_coordinates">визначається...</string>
+    <string name="back_button">ПОВЕРНУТИСЯ</string>
+    <string name="form_cleanup">Очищення форми</string>
 
 
 </resources>

@@ -7,4 +7,7 @@
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#d1d1d1</color>
     <color name="send_button_color">#c91717</color>
+    <color name="listen_location_button_color">#009688</color>
+    <color name="failed_location_button_color">#f44444</color>
+    <color name="success_location_button_color">#5779e9</color>
 </resources>
