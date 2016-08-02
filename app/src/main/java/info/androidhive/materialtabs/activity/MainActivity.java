@@ -1,6 +1,7 @@
 package info.androidhive.materialtabs.activity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;

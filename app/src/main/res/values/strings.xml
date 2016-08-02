@@ -51,6 +51,11 @@
     <string name="recieving_coordinates">визначається...</string>
     <string name="back_button">ПОВЕРНУТИСЯ</string>
     <string name="form_cleanup">Очищення форми</string>
+    <string name="settings_name">Налаштування</string>
+    <string name="navigation_settings">Джерело координат</string>
+    <string name="internet">Інтернет</string>
+    <string name="GPS">GPS</string>
+    <string name="save">ЗБЕРЕГТИ</string>
 
 
 </resources>

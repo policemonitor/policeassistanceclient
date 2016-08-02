@@ -286,16 +286,12 @@ public class TwoFragment extends Fragment {
 
             longitude = data.getDoubleExtra(GPSActivity.fetched_longitude, 0);
             latitude  = data.getDoubleExtra(GPSActivity.fetched_latitude, 0);
-
-            // Toast.makeText(getContext(), latitude + " " + longitude, Toast.LENGTH_SHORT).show();
-
+            
             location_button.setBackgroundResource(R.color.success_location_button_color);
 
             location_field.setText("Ваше місцеположення визначено");
             location_field.setEnabled(false);
             location_field.setError(null);
-
-            message_field.setError("Порожнє поле!");
 
             isCoordinatesReceived = true;
         } else {

@@ -45,16 +45,14 @@ public class ThreeFragment extends Fragment{
     public void onMakeCallButtonClick() {
         Intent make_call = new Intent(Intent.ACTION_CALL, Uri.fromParts("tel", TEST_NUMBER, null));
         try {
-            Toast toast = Toast.makeText(getContext(),
-                    "Викликаємо поліцію", Toast.LENGTH_SHORT);
-            toast.show();
+            Toast.makeText(getContext(),
+                    "Викликаємо поліцію", Toast.LENGTH_SHORT).show();
             startActivity(make_call);
         }
 
         catch (android.content.ActivityNotFoundException ex){
-            Toast toast = Toast.makeText(getContext(),
-                    "Неможливо виконати виклик", Toast.LENGTH_SHORT);
-            toast.show();
+            Toast.makeText(getContext(),
+                    "Неможливо виконати виклик", Toast.LENGTH_SHORT).show();
         }
     }
 }

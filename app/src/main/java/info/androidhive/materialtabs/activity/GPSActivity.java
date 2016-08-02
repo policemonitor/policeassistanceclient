@@ -138,7 +138,7 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
             Picasso.with(getBaseContext())
-                    .load("https://maps.googleapis.com/maps/api/staticmap?center=" + location.getLatitude() + "," + location.getLongitude() + "&zoom=14&size=" + metrics.heightPixels + "x" + metrics.widthPixels)
+                    .load("https://maps.googleapis.com/maps/api/staticmap?center=" + location.getLatitude() + "," + location.getLongitude() + "&zoom=17&size=" + metrics.heightPixels + "x" + metrics.widthPixels + "&markers=color:red%7C" + location.getLatitude() + "," + location.getLongitude() + "&scale=2&language='ua'")
                     .error(R.drawable.ic_error)
                     .into(map_field);
         }
