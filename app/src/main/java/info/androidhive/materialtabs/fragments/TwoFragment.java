@@ -120,8 +120,31 @@ public class TwoFragment extends Fragment {
                                 message_field.getText().toString()
                         );
 
-                        if (!response.equalsIgnoreCase("IO Error")) {
+                        Intent result_screen = new Intent(getActivity(), ClaimResaultActivity.class);
+
+                        if (response.equalsIgnoreCase("IO Error")) {
+                            result_screen.putExtra("result","НЕ ЗАРЕЄСТРОВАНО");
+                            result_screen.putExtra("claim", "Дані не були відправлені на сервер!");
+                            result_screen.putExtra("phone", "Спробуйте піздніше");
+                            result_screen.putExtra("button_color", 0xffC91717);
+                        } else {
+                            JSONObject jObject;
+                            int claim_id = 0;
+                            String phone_descr = "";
+
+                            try {
+                                jObject        = new JSONObject(response);
+                                claim_id       = jObject.getInt("claim_id");
+                                phone_descr    = jObject.getString("phone");
+                            } catch (JSONException e) { }
+
+                            result_screen.putExtra("result","ЗАРЕЄСТРОВАНО");
+                            result_screen.putExtra("claim", "Заява №" + claim_id);
+                            result_screen.putExtra("phone", "Телефон: " + phone_descr);
+                            result_screen.putExtra("button_color", 0xFF009688);
+
                             Claim claim = new Claim(
+                                    claim_id,
                                     lastname_field.getText().toString(),
                                     phone_number_field.getText().toString(),
                                     theme_field.getText().toString(),
@@ -131,11 +154,9 @@ public class TwoFragment extends Fragment {
                             claim.save();
                         }
 
-                        resetForm();
 
-                        Intent i = new Intent(getActivity(), ClaimResaultActivity.class);
-                        i.putExtra("response", response);
-                        startActivity(i);
+                        startActivity(result_screen);
+                        resetForm();
                     }
                 }
             }
@@ -327,23 +348,23 @@ public class TwoFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            Toast.makeText(getContext(), "Місцезнаходження визначено!", Toast.LENGTH_SHORT).show();
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(getContext(), "Місцезнаходження визначено!", Toast.LENGTH_SHORT).show();
 
-            longitude = data.getDoubleExtra(GPSActivity.fetched_longitude, 0);
-            latitude  = data.getDoubleExtra(GPSActivity.fetched_latitude, 0);
+                longitude = data.getDoubleExtra(GPSActivity.fetched_longitude, 0);
+                latitude = data.getDoubleExtra(GPSActivity.fetched_latitude, 0);
 
-            location_button.setBackgroundResource(R.color.success_location_button_color);
+                location_button.setBackgroundResource(R.color.success_location_button_color);
 
-            location_field.setText("Ваше місцеположення визначено");
-            location_field.setEnabled(false);
-            location_field.setError(null);
+                location_field.setText("Ваше місцеположення визначено");
+                location_field.setEnabled(false);
+                location_field.setError(null);
 
-            isCoordinatesReceived = true;
-        } else {
-            Toast.makeText(getContext(), "Місцезнаходження не визначено!", Toast.LENGTH_SHORT).show();
-            location_button.setBackgroundResource(R.color.failed_location_button_color);
-        }
+                isCoordinatesReceived = true;
+            } else {
+                Toast.makeText(getContext(), "Місцезнаходження не визначено!", Toast.LENGTH_SHORT).show();
+                location_button.setBackgroundResource(R.color.failed_location_button_color);
+            }
     }
 
     public void resetForm() {
@@ -372,4 +393,3 @@ public class TwoFragment extends Fragment {
         location_button.setBackgroundResource(R.color.listen_location_button_color);
     }
 }
-

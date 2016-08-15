@@ -1,17 +1,27 @@
 package info.androidhive.materialtabs.fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import info.androidhive.materialtabs.R;
+import info.androidhive.materialtabs.activity.ObserveActivity;
+import info.androidhive.materialtabs.database.Claim;
 
 
 public class OneFragment extends Fragment{
@@ -49,6 +59,8 @@ public class OneFragment extends Fragment{
 
         GPSbutton             = (RadioButton) root_view.findViewById(R.id.radio_button_gps);
         INTERNETbutton        = (RadioButton) root_view.findViewById(R.id.radio_button_internet);
+
+        final ListView claims_list = (ListView) root_view.findViewById(R.id.old_claims_list);
 
         RadioButton.OnClickListener provider_listener = new RadioButton.OnClickListener() {
             @Override
@@ -95,6 +107,34 @@ public class OneFragment extends Fragment{
             SharedPreferences.Editor editor = Settings.edit();
             editor.putString(APP_PREFERENCES_COORDINATES, "internet").apply();
         }
+
+        final List <Claim> claims = Claim.listAll(Claim.class);
+        final ArrayList<String> title_list = new ArrayList <String> ();
+        for (int i = 0; i < claims.size(); i++)
+            title_list.add("Заява №" + claims.get(i).claim_id);
+        if (title_list.isEmpty()) {
+            TextView history_label = (TextView) root_view.findViewById(R.id.old_claims);
+            history_label.setText("");
+        }
+
+
+        final ArrayAdapter <String> adapter;
+        adapter = new ArrayAdapter <String> (getContext(), android.R.layout.simple_list_item_1, title_list);
+        claims_list.setAdapter(adapter);
+
+        claims_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView <?> parent, View itemClicked, int position,
+                                    long id) {
+                TextView textView = (TextView) itemClicked;
+                String claim_id = textView.getText().toString(); // получаем текст нажатого элемента
+                claim_id = claim_id.replace("Заява №", "");
+
+                Intent observe = new Intent(getActivity(), ObserveActivity.class);
+                observe.putExtra("claim_id", claim_id);
+                startActivity(observe);
+            }
+        });
 
         return root_view;
     }

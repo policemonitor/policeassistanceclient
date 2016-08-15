@@ -105,5 +105,21 @@
             android:background="@android:color/holo_purple"
             android:foregroundGravity="bottom" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/old_claims"
+            android:id="@+id/old_claims"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/old_claims_list" />
+
     </LinearLayout>
 </RelativeLayout>

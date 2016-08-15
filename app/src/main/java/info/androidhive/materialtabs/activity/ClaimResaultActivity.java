@@ -26,41 +26,18 @@ public class ClaimResaultActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Bundle b = getIntent().getExtras();
-        String response = b.getString("response");
 
         TextView result_string = (TextView) findViewById(R.id.result_label);
         TextView phone = (TextView) findViewById(R.id.phone_label);
         TextView claim = (TextView) findViewById(R.id.claim_label);
 
+        result_string.setText(b.getString("result"));
+        claim.setText(b.getString("claim"));
+        phone.setText(b.getString("phone"));
+
         Button back_button = (Button) findViewById(R.id.return_result_button);
+        back_button.setBackgroundColor(b.getInt("button_color"));
         back_button.setText("ПОВЕРНУТИСЯ");
-
-        if (response.equalsIgnoreCase("IO Error")) {
-            result_string.setText("НЕ ЗАРЕЄСТРОВАНО");
-            claim.setText("Дані не були відправлені на сервер!");
-            phone.setText("Спробуйте піздніше");
-            back_button.setBackgroundColor(0xffC91717);
-        } else {
-            JSONObject jObject;
-            String claim_id_descr = "НЕ ЗАРЕЄСТРОВАНО";
-            String phone_descr = "Помилка у введених даних!";
-
-            try {
-                jObject        = new JSONObject(response);
-                claim_id_descr = jObject.getString("claim_id");
-                phone_descr    = jObject.getString("phone");
-            } catch (JSONException e) { }
-
-            if (!claim_id_descr.isEmpty() && !phone_descr.isEmpty()) {
-                result_string.setText("ЗАРЕЄСТРОВАНО");
-                claim.setText("Номер звернення: " + claim_id_descr);
-                phone.setText("Телефон: " + phone_descr);
-
-                back_button.setBackgroundColor(0xff009688);
-            } else {
-                back_button.setBackgroundColor(0xffC91717);
-            }
-        }
 
         back_button.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {

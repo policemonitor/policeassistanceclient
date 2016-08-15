@@ -57,6 +57,10 @@
     <string name="GPS">GPS</string>
     <string name="save">ЗБЕРЕГТИ</string>
     <string name="title_activity_claim_resault">ClaimResaultActivity</string>
+    <string name="old_claims">Історія</string>
+    <string name="title_activity_observe">ObserveActivity</string>
+    <string name="theme_label">Тема звернення</string>
+    <string name="message_label">Вміст звернення</string>
 
 
 </resources>
