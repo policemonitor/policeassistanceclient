@@ -35,8 +35,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import info.androidhive.materialtabs.R;
+import info.androidhive.materialtabs.activity.ClaimResaultActivity;
 import info.androidhive.materialtabs.activity.GPSActivity;
-import info.androidhive.materialtabs.activity.MainActivity;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -118,6 +118,12 @@ public class TwoFragment extends Fragment {
                                 latitude,
                                 message_field.getText().toString()
                         );
+
+                        resetForm();
+
+                        Intent i = new Intent(getActivity(), ClaimResaultActivity.class);
+                        i.putExtra("response", response);
+                        startActivity(i);
                     }
                 }
             }
@@ -276,7 +282,7 @@ public class TwoFragment extends Fragment {
             okhttp3.Response response = client.newCall(request).execute();
             response_string = response.body().string();
         } catch (IOException e) {
-            response_string = "IO Error" + e.getMessage() + mainObject.toString();
+            response_string = "IO Error"; // + e.getMessage() + mainObject.toString();
         }
         return response_string;
     }
@@ -295,7 +301,7 @@ public class TwoFragment extends Fragment {
         catch(Exception e) {
             Toast.makeText(getContext(), "Помилка з'єднання з сервісом Google Geocoder", Toast.LENGTH_SHORT).show();
         }
-        
+
         if (longitude != 0.0 && latitude != 0.0) {
             isCoordinatesReceived = true;
             location_button.setBackgroundResource(R.color.success_location_button_color);

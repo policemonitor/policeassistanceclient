@@ -28,7 +28,12 @@
             android:name=".activity.GPSActivity"
             android:label="@string/title_activity_gps"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme"/>
+            android:theme="@style/MyMaterialTheme" />
+        <activity android:name=".activity.ResultActivity" />
+        <activity
+            android:name=".activity.ClaimResaultActivity"
+            android:label="@string/title_activity_claim_resault"
+            android:theme="@style/MyMaterialTheme"></activity>
     </application>
 
 </manifest>

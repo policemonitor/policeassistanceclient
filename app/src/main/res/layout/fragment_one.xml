@@ -33,7 +33,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textCapWords|textPersonName"
             android:ems="10"
             android:id="@+id/lastname_settings"
             android:layout_marginLeft="8dp"
@@ -99,10 +99,11 @@
             android:layout_height="wrap_content"
             android:text="@string/save"
             android:id="@+id/save_button"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="bottom|center_horizontal"
             android:layout_margin="8dp"
             android:textColor="@color/abc_primary_text_material_dark"
-            android:background="@android:color/holo_purple" />
+            android:background="@android:color/holo_purple"
+            android:foregroundGravity="bottom" />
 
     </LinearLayout>
 </RelativeLayout>
