@@ -40,7 +40,7 @@ public class ObserveActivity extends AppCompatActivity {
         TextView message_label  = (TextView) findViewById(R.id.message_label);
 
         try {
-            List<Claim> claim_list = Claim.findWithQuery(Claim.class, "select * from Claim where claim_id = ?", claim_id);
+            List<Claim> claim_list = Claim.findWithQuery(Claim.class, "select * from Claim where claimid = ?", claim_id);
             Claim claim = claim_list.get(0);
 
             ImageView map = (ImageView) findViewById(R.id.map_img);
@@ -54,7 +54,7 @@ public class ObserveActivity extends AppCompatActivity {
 
             Picasso.with(getBaseContext())
                     .load("https://maps.googleapis.com/maps/api/staticmap?center=" + claim.latitude +
-                            "," + claim.longitude + "&zoom=19&size=" + metrics.heightPixels + "x" +
+                            "," + claim.longitude + "&zoom=17&size=" + metrics.heightPixels + "x" +
                             metrics.widthPixels + "&markers=color:red%7C" + claim.latitude +
                             "," + claim.longitude + "&scale=2&language='ua'")
                     .error(R.mipmap.ic_map)
