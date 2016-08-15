@@ -1,10 +1,8 @@
 package info.androidhive.materialtabs.fragments;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +16,10 @@ import info.androidhive.materialtabs.R;
 
 public class OneFragment extends Fragment{
 
-    private static final String APP_PREFERENCES = "police.assistance.settings";
-    private static final String APP_PREFERENCES_LASTNAME = "lastname";
-    private static final String APP_PREFERENCES_PHONE = "phone";
-    private static final String APP_PREFERENCES_COORDINATES = "coordinate";
+    public static final String APP_PREFERENCES = "police.assistance.settings";
+    public static final String APP_PREFERENCES_LASTNAME = "lastname";
+    public static final String APP_PREFERENCES_PHONE = "phone";
+    public static final String APP_PREFERENCES_COORDINATES = "coordinate";
 
     private SharedPreferences Settings;
 
@@ -69,6 +67,8 @@ public class OneFragment extends Fragment{
                 SharedPreferences.Editor editor = Settings.edit();
                 editor.putString(APP_PREFERENCES_LASTNAME, lastname_settings.getText().toString()).apply();
                 editor.putString(APP_PREFERENCES_PHONE, phone_number_settings.getText().toString()).apply();
+
+
 
                 Toast.makeText(getContext(),
                         "Налаштування збережено", Toast.LENGTH_SHORT).show();

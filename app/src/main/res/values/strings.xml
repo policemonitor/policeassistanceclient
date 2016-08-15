@@ -8,10 +8,10 @@
     <string name="quick_call">Екстрений виклик</string>
     <string name="police_number">102</string>
 
-    <string name="lastname">Прізвище та Імя</string>
+    <string name="lastname"><u>Прізвище та Імя</u></string>
     <string name="hint_lastname">Шатов Тарас Генадійович</string>
 
-    <string name="phone_number">Ваш номер телефону</string>
+    <string name="phone_number"><u>Ваш номер телефону</u></string>
     <string name="text_phone_number">+380</string>
     <string name="hint_phone_number">+380445551445</string>
 

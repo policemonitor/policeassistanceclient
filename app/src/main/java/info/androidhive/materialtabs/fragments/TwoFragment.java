@@ -3,9 +3,11 @@ package info.androidhive.materialtabs.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.telephony.PhoneNumberUtils;
 import android.location.Location;
@@ -41,6 +44,7 @@ import okhttp3.RequestBody;
 
 
 public class TwoFragment extends Fragment {
+    private SharedPreferences Settings;
 
     private double latitude = 0.0;
     private double longitude = 0.0;
@@ -51,6 +55,9 @@ public class TwoFragment extends Fragment {
     private EditText theme_field;
     private EditText location_field;
     private EditText message_field;
+
+    private TextView lastname_label;
+    private TextView phone_number_label;
 
     private Button send_button;
     private ImageView location_button;
@@ -83,6 +90,11 @@ public class TwoFragment extends Fragment {
         theme_field         = (EditText) root_view.findViewById(R.id.theme);
         location_field      = (EditText) root_view.findViewById(R.id.location);
         message_field       = (EditText) root_view.findViewById(R.id.message);
+
+        lastname_label      = (TextView) root_view.findViewById(R.id.label_lastname);
+        phone_number_label  = (TextView) root_view.findViewById(R.id.label_phone_number);
+
+        Settings = this.getActivity().getSharedPreferences(OneFragment.APP_PREFERENCES, getActivity().MODE_PRIVATE);
 
         Button.OnClickListener listener = new Button.OnClickListener() {
             @Override
@@ -134,11 +146,30 @@ public class TwoFragment extends Fragment {
         };
         brush_button.setOnClickListener(brush_listener);
 
+        TextView.OnClickListener lastname_listener = new ImageView.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (Settings.contains(OneFragment.APP_PREFERENCES_LASTNAME)) {
+                    lastname_field.setText(Settings.getString(OneFragment.APP_PREFERENCES_LASTNAME, ""));
+                }
+            }
+        };
+        lastname_label.setOnClickListener(lastname_listener);
+
+        TextView.OnClickListener phone_number_listener = new ImageView.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (Settings.contains(OneFragment.APP_PREFERENCES_PHONE)) {
+                    phone_number_field.setText(Settings.getString(OneFragment.APP_PREFERENCES_PHONE, ""));
+                }
+            }
+        };
+        phone_number_label.setOnClickListener(phone_number_listener);
+
         return root_view;
     }
 
     /*                                 VALIDATION BLOCK                                           */
-
 
     private boolean check_information() {                       // Complex validation for whole form
         boolean check_list = true;
@@ -232,7 +263,7 @@ public class TwoFragment extends Fragment {
         OkHttpClient client = new OkHttpClient();
 
         RequestBody body = RequestBody.create(JSON, mainObject.toString());
-        String url = "http://192.168.1.9:3000/API";
+        String url = "http://192.168.1.4:3000/API";
         Request request = new Request.Builder()
                 .addHeader("Content-Type","application/json")
                 .addHeader("Accept", "application/json")
@@ -264,11 +295,8 @@ public class TwoFragment extends Fragment {
         catch(Exception e) {
             Toast.makeText(getContext(), "Помилка з'єднання з сервісом Google Geocoder", Toast.LENGTH_SHORT).show();
         }
-
-        Toast.makeText(getContext(), latitude + " " + longitude, Toast.LENGTH_SHORT).show();
-
+        
         if (longitude != 0.0 && latitude != 0.0) {
-            Toast.makeText(getContext(), "Координати визначено!", Toast.LENGTH_SHORT).show();
             isCoordinatesReceived = true;
             location_button.setBackgroundResource(R.color.success_location_button_color);
             location_field.setError(null);
@@ -286,7 +314,7 @@ public class TwoFragment extends Fragment {
 
             longitude = data.getDoubleExtra(GPSActivity.fetched_longitude, 0);
             latitude  = data.getDoubleExtra(GPSActivity.fetched_latitude, 0);
-            
+
             location_button.setBackgroundResource(R.color.success_location_button_color);
 
             location_field.setText("Ваше місцеположення визначено");

@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -16,13 +17,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.squareup.picasso.Picasso;
 
 import info.androidhive.materialtabs.R;
+import info.androidhive.materialtabs.fragments.OneFragment;
 
 public class GPSActivity extends AppCompatActivity implements LocationListener {
+
+    private SharedPreferences Settings;
 
     private LocationManager locationManager;
     private String provider;
@@ -76,8 +81,17 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
         locationManager     = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria   = new Criteria();
         provider = locationManager.getBestProvider(criteria, true);
-        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
+
+        Settings = getSharedPreferences(OneFragment.APP_PREFERENCES, MODE_PRIVATE);                 // Look for pre-shared settings
+        if (Settings.contains(OneFragment.APP_PREFERENCES_COORDINATES) &&                           // If settings exists for coordinates
+            Settings.getString(OneFragment.APP_PREFERENCES_COORDINATES, "") == "gps") {                            // And if it configured for gps APP_PREFERENCES_COORDINATES = FALSE)
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Toast.makeText(this, "Джерело інформації: GPS", Toast.LENGTH_SHORT).show();
+        } else {
+            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);          // Set default coordinates provider - Network
+            Toast.makeText(this, "Джерело інформації: Інтернет", Toast.LENGTH_SHORT).show();
+        }
         //                  Setting up screen
 
         startupMap();
