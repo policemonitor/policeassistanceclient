@@ -37,6 +37,7 @@ import java.util.regex.Pattern;
 import info.androidhive.materialtabs.R;
 import info.androidhive.materialtabs.activity.ClaimResaultActivity;
 import info.androidhive.materialtabs.activity.GPSActivity;
+import info.androidhive.materialtabs.database.Claim;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -114,10 +115,21 @@ public class TwoFragment extends Fragment {
                                 lastname_field.getText().toString(),
                                 phone_number_field.getText().toString(),
                                 theme_field.getText().toString(),
-                                longitude,
                                 latitude,
+                                longitude,
                                 message_field.getText().toString()
                         );
+
+                        if (!response.equalsIgnoreCase("IO Error")) {
+                            Claim claim = new Claim(
+                                    lastname_field.getText().toString(),
+                                    phone_number_field.getText().toString(),
+                                    theme_field.getText().toString(),
+                                    latitude,
+                                    longitude,
+                                    message_field.getText().toString());
+                            claim.save();
+                        }
 
                         resetForm();
 
@@ -244,8 +256,8 @@ public class TwoFragment extends Fragment {
     private String postClaim(String lastname,
                              String phone,
                              String theme,
-                             double lon,
                              double lat,
+                             double lon,
                              String message)  {         // Sending claim to server
 
         final MediaType JSON
