@@ -1,22 +1,22 @@
 <resources>
     <string name="app_name">Police Assistance</string>
 
-    <string name="one">ДАНІ</string>
+    <string name="one">ПРОФІЛЬ</string>
     <string name="two">ЗАЯВА</string>
     <string name="three">ВИКЛИК</string>
 
     <string name="quick_call">Екстрений виклик</string>
     <string name="police_number">102</string>
 
-    <string name="lastname"><u>Прізвище та Імя</u></string>
-    <string name="hint_lastname">Шатов Тарас Генадійович</string>
+    <string name="lastname"><u>Прізвище та Ім\'я</u></string>
+    <string name="hint_lastname">Наприклад: Шатов Тарас</string>
 
     <string name="phone_number"><u>Ваш номер телефону</u></string>
     <string name="text_phone_number">+380</string>
-    <string name="hint_phone_number">+380445551445</string>
+    <string name="hint_phone_number">Наприклад: +380445551445</string>
 
     <string name="theme">Тема звернення</string>
-    <string name="hint_theme">Крадіжка</string>
+    <string name="hint_theme">Наприклад: крадіжка</string>
 
     <string name="hint_location">Місце злочину</string>
 
@@ -61,6 +61,8 @@
     <string name="title_activity_observe">ObserveActivity</string>
     <string name="theme_label">Тема звернення</string>
     <string name="message_label">Вміст звернення</string>
+    <string name="clean_form">Очистити форму</string>
+    <string name="location_hint">Місцезнаходження</string>
 
 
 </resources>

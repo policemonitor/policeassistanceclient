@@ -47,7 +47,8 @@
         android:background="@color/accent_material_light"
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/gps_ocuring"
-        android:layout_alignStart="@+id/gps_ocuring" />
+        android:layout_alignStart="@+id/gps_ocuring"
+        android:layout_marginTop="4dp" />
 
     <TextView
         android:layout_width="wrap_content"

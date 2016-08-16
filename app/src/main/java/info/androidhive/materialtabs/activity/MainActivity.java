@@ -52,17 +52,17 @@ public class MainActivity extends AppCompatActivity {
 
         TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         tabOne.setText(R.string.one);
-        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_settings, 0, 0);
+        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_person, 0, 0);
         tabLayout.getTabAt(0).setCustomView(tabOne);
 
         TextView tabTwo = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         tabTwo.setText(R.string.two);
-        tabTwo.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_tab_contacts, 0, 0);
+        tabTwo.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_insert_drive_file, 0, 0);
         tabLayout.getTabAt(1).setCustomView(tabTwo);
 
         TextView tabThree = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         tabThree.setText(R.string.three);
-        tabThree.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_tab_call, 0, 0);
+        tabThree.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_call, 0, 0);
         tabLayout.getTabAt(2).setCustomView(tabThree);
     }
 
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new OneFragment(), "ДАНІ");
+        adapter.addFrag(new OneFragment(), "ПРОФІЛЬ");
         adapter.addFrag(new TwoFragment(), "ЗАЯВА");
         adapter.addFrag(new ThreeFragment(), "ВИКЛИК");
         viewPager.setAdapter(adapter);

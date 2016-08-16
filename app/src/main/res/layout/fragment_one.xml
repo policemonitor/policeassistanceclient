@@ -102,7 +102,7 @@
             android:layout_gravity="bottom|center_horizontal"
             android:layout_margin="8dp"
             android:textColor="@color/abc_primary_text_material_dark"
-            android:background="@android:color/holo_purple"
+            android:background="@android:color/holo_blue_dark"
             android:foregroundGravity="bottom" />
 
         <TextView

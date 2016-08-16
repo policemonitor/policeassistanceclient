@@ -123,9 +123,9 @@ public class TwoFragment extends Fragment {
                         Intent result_screen = new Intent(getActivity(), ClaimResaultActivity.class);
 
                         if (response.equalsIgnoreCase("IO Error")) {
-                            result_screen.putExtra("result","НЕ ЗАРЕЄСТРОВАНО");
-                            result_screen.putExtra("claim", "Дані не були відправлені на сервер!");
-                            result_screen.putExtra("phone", "Спробуйте піздніше");
+                            result_screen.putExtra("result","ПОМИЛКА");
+                            result_screen.putExtra("claim", "Сервер тимчасово недоступний!");
+                            result_screen.putExtra("phone", "Спробуйте пізніше");
                             result_screen.putExtra("button_color", 0xffC91717);
                         } else {
                             JSONObject jObject;
@@ -346,6 +346,26 @@ public class TwoFragment extends Fragment {
 
     }
 
+    public static Address getAddress(final Context context,
+                                    final double latitude,
+                                    final double longitude) {
+        if (latitude == 0d || longitude == 0d)
+            return null;
+
+        final Geocoder geocoder = new Geocoder(context);
+        final List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocation(latitude,
+                    longitude, 1);
+        } catch (IOException e) {
+            return null;
+        }
+        if (addresses != null && !addresses.isEmpty())
+            return addresses.get(0);
+        else
+            return null;
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
             if (resultCode == Activity.RESULT_OK) {
@@ -355,9 +375,8 @@ public class TwoFragment extends Fragment {
                 latitude = data.getDoubleExtra(GPSActivity.fetched_latitude, 0);
 
                 location_button.setBackgroundResource(R.color.success_location_button_color);
-
-                location_field.setText("Ваше місцеположення визначено");
-                location_field.setEnabled(false);
+                Address located_address = getAddress(getContext(),latitude, longitude);
+                location_field.setText(located_address.getAddressLine(1) + ", " + located_address.getAddressLine(0));
                 location_field.setError(null);
 
                 isCoordinatesReceived = true;
