@@ -246,15 +246,15 @@ public class TwoFragment extends Fragment {
     }
 
     private boolean isValidLastname(String lastname) {  // Checking lastname with pattern and ukrainian, russian and english characters
-        String EMAIL_PATTERN = "^([A-ZА-Яa-zа-яІіЬыЫьъЪїЇҐґ]+[,.]?[ ]?|[a-z]+['-]?)+$";
+        String NAME_PATTERN = "^([A-ZА-Яa-zа-яІіЬыЫьъЪїЇҐґ]+[,.]?[ ]?|[a-z]+['-]?)+$";
 
-        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        Pattern pattern = Pattern.compile(NAME_PATTERN);
         Matcher matcher = pattern.matcher(lastname);
-        return matcher.matches();
+        return matcher.matches() && lastname.length() >= 5;
     }
 
     private boolean isValidPhoneNumber(String phone_number) {   // Validation phone field with international format
-        return PhoneNumberUtils.isGlobalPhoneNumber(phone_number) && phone_number.length() > 6;
+        return PhoneNumberUtils.isGlobalPhoneNumber(phone_number) && phone_number.length() > 12;
     }
 
     private boolean isValidLocation() {      // Checking location field
@@ -302,7 +302,7 @@ public class TwoFragment extends Fragment {
         OkHttpClient client = new OkHttpClient();
 
         RequestBody body = RequestBody.create(JSON, mainObject.toString());
-        String url = "http://192.168.1.4:3000/API";
+        String url = "http://192.168.15.83:3000/API";
         Request request = new Request.Builder()
                 .addHeader("Content-Type","application/json")
                 .addHeader("Accept", "application/json")
