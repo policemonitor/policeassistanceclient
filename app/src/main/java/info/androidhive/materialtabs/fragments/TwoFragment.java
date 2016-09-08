@@ -302,7 +302,7 @@ public class TwoFragment extends Fragment {
         OkHttpClient client = new OkHttpClient();
 
         RequestBody body = RequestBody.create(JSON, mainObject.toString());
-        String url = "http://192.168.15.83:3000/API";
+        String url = "http://192.168.1.12:3000/API";
         Request request = new Request.Builder()
                 .addHeader("Content-Type","application/json")
                 .addHeader("Accept", "application/json")
@@ -315,7 +315,7 @@ public class TwoFragment extends Fragment {
             okhttp3.Response response = client.newCall(request).execute();
             response_string = response.body().string();
         } catch (IOException e) {
-            response_string = "IO Error"; // + e.getMessage() + mainObject.toString();
+            response_string = "IO Error";
         }
         return response_string;
     }
