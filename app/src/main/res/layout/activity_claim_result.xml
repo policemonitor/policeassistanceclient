@@ -21,6 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_claim_resault" />
+    <include layout="@layout/content_claim_result" />
 
 </android.support.design.widget.CoordinatorLayout>

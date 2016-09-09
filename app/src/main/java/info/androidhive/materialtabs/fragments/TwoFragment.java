@@ -35,7 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import info.androidhive.materialtabs.R;
-import info.androidhive.materialtabs.activity.ClaimResaultActivity;
+import info.androidhive.materialtabs.activity.ClaimResultActivity;
 import info.androidhive.materialtabs.activity.GPSActivity;
 import info.androidhive.materialtabs.database.Claim;
 import okhttp3.MediaType;
@@ -57,12 +57,7 @@ public class TwoFragment extends Fragment {
     private EditText location_field;
     private EditText message_field;
 
-    private TextView lastname_label;
-    private TextView phone_number_label;
-
-    private Button send_button;
     private ImageView location_button;
-    private ImageView brush_button;
 
     public TwoFragment() {
         // Required empty public constructor
@@ -82,9 +77,9 @@ public class TwoFragment extends Fragment {
                 .permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        send_button         = (Button)  root_view.findViewById(R.id.send_button);
+        Button send_button = (Button) root_view.findViewById(R.id.send_button);
         location_button     = (ImageView) root_view.findViewById(R.id.auto_location);
-        brush_button        = (ImageView) root_view.findViewById(R.id.brush_button);
+        ImageView brush_button = (ImageView) root_view.findViewById(R.id.brush_button);
 
         lastname_field      = (EditText) root_view.findViewById(R.id.lastname);
         phone_number_field  = (EditText) root_view.findViewById(R.id.phone_number);
@@ -92,10 +87,10 @@ public class TwoFragment extends Fragment {
         location_field      = (EditText) root_view.findViewById(R.id.location);
         message_field       = (EditText) root_view.findViewById(R.id.message);
 
-        lastname_label      = (TextView) root_view.findViewById(R.id.label_lastname);
-        phone_number_label  = (TextView) root_view.findViewById(R.id.label_phone_number);
+        TextView lastname_label = (TextView) root_view.findViewById(R.id.label_lastname);
+        TextView phone_number_label = (TextView) root_view.findViewById(R.id.label_phone_number);
 
-        Settings = this.getActivity().getSharedPreferences(OneFragment.APP_PREFERENCES, getActivity().MODE_PRIVATE);
+        Settings = this.getActivity().getSharedPreferences(OneFragment.APP_PREFERENCES, Context.MODE_PRIVATE);
 
         Button.OnClickListener listener = new Button.OnClickListener() {
             @Override
@@ -120,7 +115,7 @@ public class TwoFragment extends Fragment {
                                 message_field.getText().toString()
                         );
 
-                        Intent result_screen = new Intent(getActivity(), ClaimResaultActivity.class);
+                        Intent result_screen = new Intent(getActivity(), ClaimResultActivity.class);
 
                         if (response.equalsIgnoreCase("IO Error")) {
                             result_screen.putExtra("result","ПОМИЛКА");
@@ -136,7 +131,7 @@ public class TwoFragment extends Fragment {
                                 jObject        = new JSONObject(response);
                                 claim_id       = jObject.getInt("claim_id");
                                 phone_descr    = jObject.getString("phone");
-                            } catch (JSONException e) { }
+                            } catch (JSONException ignored) { }
 
                             result_screen.putExtra("result","ЗАРЕЄСТРОВАНО");
                             result_screen.putExtra("claim", "Заява №" + claim_id);
