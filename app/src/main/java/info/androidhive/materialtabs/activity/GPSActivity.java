@@ -27,20 +27,18 @@ import info.androidhive.materialtabs.fragments.OneFragment;
 
 public class GPSActivity extends AppCompatActivity implements LocationListener {
 
-    private SharedPreferences Settings;
-
     private LocationManager locationManager;
     private String provider;
     private Location location;
 
-    public static final String fetched_latitude  = "latitude";
-    public static final String fetched_longitude = "longitude";
+    public static final String fetchedLatitude  = "latitude";
+    public static final String fetchedLongitude = "longitude";
 
     TextView latitude;
     TextView longitude;
 
-    ImageView map_field;
-    Button back_button;
+    ImageView mapField;
+    Button backButton;
 
     ObjectAnimator scaleDown;
 
@@ -56,19 +54,19 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
         toolbar.setNavigationIcon(R.drawable.ic_gps_fixed_inverted);
         setSupportActionBar(toolbar);
 
-        map_field =     (ImageView) findViewById(R.id.map_image);
-        back_button =   (Button)    findViewById(R.id.back_button);
+        mapField =     (ImageView) findViewById(R.id.map_image);
+        backButton =   (Button)    findViewById(R.id.back_button);
         latitude =      (TextView)  findViewById(R.id.latitude_field);
         longitude =     (TextView)  findViewById(R.id.longitude_field);
 
         final Intent intent = new Intent();
 
-        back_button.setOnClickListener(new Button.OnClickListener() {
+        backButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 if (location != null) {
                     setResult(AppCompatActivity.RESULT_OK, intent);
-                    intent.putExtra(fetched_latitude, location.getLatitude());
-                    intent.putExtra(fetched_longitude, location.getLongitude());
+                    intent.putExtra(fetchedLatitude, location.getLatitude());
+                    intent.putExtra(fetchedLongitude, location.getLongitude());
                 } else {
                     setResult(AppCompatActivity.RESULT_CANCELED, intent);
                 }
@@ -83,9 +81,9 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
         provider = locationManager.getBestProvider(criteria, true);
 
 
-        Settings = getSharedPreferences(OneFragment.APP_PREFERENCES, MODE_PRIVATE);                 // Look for pre-shared settings
-        if (Settings.contains(OneFragment.APP_PREFERENCES_COORDINATES) &&                           // If settings exists for coordinates
-            Settings.getString(OneFragment.APP_PREFERENCES_COORDINATES, "") == "gps") {                            // And if it configured for gps APP_PREFERENCES_COORDINATES = FALSE)
+        SharedPreferences settings = getSharedPreferences(OneFragment.APP_PREFERENCES, MODE_PRIVATE);
+        if (settings.contains(OneFragment.APP_PREFERENCES_COORDINATES) &&                           // If settings exists for coordinates
+            settings.getString(OneFragment.APP_PREFERENCES_COORDINATES, "") == "gps") {                            // And if it configured for gps APPPREFERENCESCOORDINATES = FALSE)
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             Toast.makeText(this, "Джерело інформації: GPS", Toast.LENGTH_SHORT).show();
         } else {
@@ -102,8 +100,8 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
         Picasso.with(getBaseContext())
                 .load("http://icons.iconarchive.com/icons/flat-icons.com/flat/512/Satellite-icon.png")
                 .error(R.drawable.ic_gps_fixed)
-                .into(map_field);
-        scaleDown = ObjectAnimator.ofPropertyValuesHolder(map_field,
+                .into(mapField);
+        scaleDown = ObjectAnimator.ofPropertyValuesHolder(mapField,
                 PropertyValuesHolder.ofFloat("scaleX", 0.95f),
                 PropertyValuesHolder.ofFloat("scaleY", 0.95f));
         scaleDown.setDuration(1000);
@@ -152,9 +150,13 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
             Picasso.with(getBaseContext())
-                    .load("https://maps.googleapis.com/maps/api/staticmap?center=" + location.getLatitude() + "," + location.getLongitude() + "&zoom=17&size=" + metrics.heightPixels + "x" + metrics.widthPixels + "&markers=color:red%7C" + location.getLatitude() + "," + location.getLongitude() + "&scale=2&language='ua'")
+                    .load("https://maps.googleapis.com/maps/api/staticmap?center=" +
+                            location.getLatitude() + "," + location.getLongitude() +
+                            "&zoom=17&size=" + metrics.heightPixels + "x" + metrics.widthPixels +
+                            "&markers=color:red%7C" + location.getLatitude() + "," +
+                            location.getLongitude() + "&scale=2&language='ua'")
                     .error(R.drawable.ic_error)
-                    .into(map_field);
+                    .into(mapField);
         }
     }
 }

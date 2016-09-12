@@ -14,7 +14,6 @@ import info.androidhive.materialtabs.R;
 
 public class ThreeFragment extends Fragment{
 
-
     public static final String  POLICE      = "102";
     public static final String  TEST_NUMBER = "+380502424424";
 
@@ -30,8 +29,8 @@ public class ThreeFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root_view =  inflater.inflate(R.layout.fragment_three, container, false);
-        ImageButton emergency_button = (ImageButton)root_view.findViewById(R.id.imageButtonMakeCall);
+        View rootView =  inflater.inflate(R.layout.fragment_three, container, false);
+        ImageButton emergencyButton = (ImageButton)rootView.findViewById(R.id.imageButtonMakeCall);
 
         ImageButton.OnClickListener listener = new ImageButton.OnClickListener() {
             @Override
@@ -40,15 +39,15 @@ public class ThreeFragment extends Fragment{
                 onMakeCallButtonClick();
             }
         };
-        emergency_button.setOnClickListener(listener);
-        return root_view;
+        emergencyButton.setOnClickListener(listener);
+        return rootView;
     }
     public void onMakeCallButtonClick() {
-        Intent make_call = new Intent(Intent.ACTION_CALL, Uri.fromParts("tel", TEST_NUMBER, null));
+        Intent makeCall = new Intent(Intent.ACTION_CALL, Uri.fromParts("tel", TEST_NUMBER, null));
         try {
             Toast.makeText(getContext(),
                     "Викликаємо поліцію", Toast.LENGTH_SHORT).show();
-            startActivity(make_call);
+            startActivity(makeCall);
         }
 
         catch (android.content.ActivityNotFoundException ex){

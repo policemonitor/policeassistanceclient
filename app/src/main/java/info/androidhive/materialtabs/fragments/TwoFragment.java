@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -22,13 +20,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.telephony.PhoneNumberUtils;
-import android.location.Location;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -38,6 +35,7 @@ import info.androidhive.materialtabs.R;
 import info.androidhive.materialtabs.activity.ClaimResultActivity;
 import info.androidhive.materialtabs.activity.GPSActivity;
 import info.androidhive.materialtabs.database.Claim;
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -45,19 +43,20 @@ import okhttp3.RequestBody;
 
 
 public class TwoFragment extends Fragment {
+
     private SharedPreferences Settings;
 
     private double latitude = 0.0;
     private double longitude = 0.0;
     private boolean isCoordinatesReceived = false;
 
-    private EditText lastname_field;
-    private EditText phone_number_field;
-    private EditText theme_field;
-    private EditText location_field;
-    private EditText message_field;
+    private EditText lastnameField;
+    private EditText phoneNumberField;
+    private EditText themeField;
+    private EditText locationField;
+    private EditText messageField;
 
-    private ImageView location_button;
+    private ImageView locationButton;
 
     public TwoFragment() {
         // Required empty public constructor
@@ -71,26 +70,26 @@ public class TwoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root_view = inflater.inflate(R.layout.fragment_two, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_two, container, false);
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                .permitAll().build();
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        Button send_button = (Button) root_view.findViewById(R.id.send_button);
-        location_button     = (ImageView) root_view.findViewById(R.id.auto_location);
-        ImageView brush_button = (ImageView) root_view.findViewById(R.id.brush_button);
+        Button sendButton = (Button) rootView.findViewById(R.id.send_button);
+        locationButton     = (ImageView) rootView.findViewById(R.id.auto_location);
+        ImageView brushButton = (ImageView) rootView.findViewById(R.id.brush_button);
 
-        lastname_field      = (EditText) root_view.findViewById(R.id.lastname);
-        phone_number_field  = (EditText) root_view.findViewById(R.id.phone_number);
-        theme_field         = (EditText) root_view.findViewById(R.id.theme);
-        location_field      = (EditText) root_view.findViewById(R.id.location);
-        message_field       = (EditText) root_view.findViewById(R.id.message);
+        lastnameField      = (EditText) rootView.findViewById(R.id.lastname);
+        phoneNumberField   = (EditText) rootView.findViewById(R.id.phone_number);
+        themeField         = (EditText) rootView.findViewById(R.id.theme);
+        locationField      = (EditText) rootView.findViewById(R.id.location);
+        messageField       = (EditText) rootView.findViewById(R.id.message);
 
-        TextView lastname_label = (TextView) root_view.findViewById(R.id.label_lastname);
-        TextView phone_number_label = (TextView) root_view.findViewById(R.id.label_phone_number);
+        TextView lastnameLabel = (TextView) rootView.findViewById(R.id.label_lastname);
+        TextView phoneNumberLabel = (TextView) rootView.findViewById(R.id.label_phone_number);
 
-        Settings = this.getActivity().getSharedPreferences(OneFragment.APP_PREFERENCES, Context.MODE_PRIVATE);
+        Settings = this.getActivity().getSharedPreferences(OneFragment.APP_PREFERENCES,
+                                                            Context.MODE_PRIVATE);
 
         Button.OnClickListener listener = new Button.OnClickListener() {
             @Override
@@ -100,144 +99,144 @@ public class TwoFragment extends Fragment {
                             "Неможливо відправити! Нема Інтернет зв'язку!", Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
-                    if (check_information()) {
-                        getLatLongFromAddress(location_field.getText().toString());
+                    if (checkInformation()) {
+                        getLatLongFromAddress(locationField.getText().toString());
                         Toast toast = Toast.makeText(getContext(),
                                 "Відправляємо", Toast.LENGTH_SHORT);
                         toast.show();
 
                         String response = postClaim(
-                                lastname_field.getText().toString(),
-                                phone_number_field.getText().toString(),
-                                theme_field.getText().toString(),
+                                lastnameField.getText().toString(),
+                                phoneNumberField.getText().toString(),
+                                themeField.getText().toString(),
                                 latitude,
                                 longitude,
-                                message_field.getText().toString()
+                                messageField.getText().toString()
                         );
 
-                        Intent result_screen = new Intent(getActivity(), ClaimResultActivity.class);
+                        Intent resultScreen = new Intent(getActivity(), ClaimResultActivity.class);
 
                         if (response.equalsIgnoreCase("IO Error")) {
-                            result_screen.putExtra("result","ПОМИЛКА");
-                            result_screen.putExtra("claim", "Сервер тимчасово недоступний!");
-                            result_screen.putExtra("phone", "Спробуйте пізніше");
-                            result_screen.putExtra("button_color", 0xffC91717);
+                            resultScreen.putExtra("result","ПОМИЛКА");
+                            resultScreen.putExtra("claim", "Сервер тимчасово недоступний!");
+                            resultScreen.putExtra("phone", "Спробуйте пізніше");
+                            resultScreen.putExtra("buttonColor", 0xffC91717);
                         } else {
                             JSONObject jObject;
-                            int claim_id = 0;
-                            String phone_descr = "";
+                            int claimId = 0;
+                            String phoneDescr = "";
 
                             try {
                                 jObject        = new JSONObject(response);
-                                claim_id       = jObject.getInt("claim_id");
-                                phone_descr    = jObject.getString("phone");
+                                claimId       = jObject.getInt("claim_id");
+                                phoneDescr    = jObject.getString("phone");
                             } catch (JSONException ignored) { }
 
-                            result_screen.putExtra("result","ЗАРЕЄСТРОВАНО");
-                            result_screen.putExtra("claim", "Заява №" + claim_id);
-                            result_screen.putExtra("phone", "Телефон: " + phone_descr);
-                            result_screen.putExtra("button_color", 0xFF009688);
+                            resultScreen.putExtra("result","ЗАРЕЄСТРОВАНО");
+                            resultScreen.putExtra("claim", "Заява №" + claimId);
+                            resultScreen.putExtra("phone", "Телефон: " + phoneDescr);
+                            resultScreen.putExtra("buttonColor", 0xFF009688);
 
                             Claim claim = new Claim(
-                                    claim_id,
-                                    lastname_field.getText().toString(),
-                                    phone_number_field.getText().toString(),
-                                    theme_field.getText().toString(),
+                                    claimId,
+                                    lastnameField.getText().toString(),
+                                    phoneNumberField.getText().toString(),
+                                    themeField.getText().toString(),
                                     latitude,
                                     longitude,
-                                    message_field.getText().toString());
+                                    messageField.getText().toString());
                             claim.save();
                         }
 
 
-                        startActivity(result_screen);
+                        startActivity(resultScreen);
                         resetForm();
                     }
                 }
             }
         };
-        send_button.setOnClickListener(listener);
+        sendButton.setOnClickListener(listener);
 
-        ImageView.OnClickListener location_listener = new ImageView.OnClickListener() {
+        ImageView.OnClickListener locationListener = new ImageView.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (!location_field.getText().toString().isEmpty()) {
-                    getLatLongFromAddress(location_field.toString());
+                if (!locationField.getText().toString().isEmpty()) {
+                    getLatLongFromAddress(locationField.toString());
                 } else {
                     Intent intent = new Intent(getActivity(), GPSActivity.class);
                     startActivityForResult(intent, 1);
                 }
             }
         };
-        location_button.setOnClickListener(location_listener);
+        locationButton.setOnClickListener(locationListener);
 
-        ImageView.OnClickListener brush_listener = new ImageView.OnClickListener() {
+        ImageView.OnClickListener brushListener =  new ImageView.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 resetForm();
                 Toast.makeText(getContext(), "Форму очищено", Toast.LENGTH_SHORT).show();
             }
         };
-        brush_button.setOnClickListener(brush_listener);
+        brushButton.setOnClickListener(brushListener);
 
-        TextView.OnClickListener lastname_listener = new ImageView.OnClickListener() {
+        TextView.OnClickListener lastnameListener = new ImageView.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 if (Settings.contains(OneFragment.APP_PREFERENCES_LASTNAME)) {
-                    lastname_field.setText(Settings.getString(OneFragment.APP_PREFERENCES_LASTNAME, ""));
+                    lastnameField.setText(Settings.getString(OneFragment.APP_PREFERENCES_LASTNAME, ""));
                 }
             }
         };
-        lastname_label.setOnClickListener(lastname_listener);
+        lastnameLabel.setOnClickListener(lastnameListener);
 
-        TextView.OnClickListener phone_number_listener = new ImageView.OnClickListener() {
+        TextView.OnClickListener phoneNumberListener = new ImageView.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 if (Settings.contains(OneFragment.APP_PREFERENCES_PHONE)) {
-                    phone_number_field.setText(Settings.getString(OneFragment.APP_PREFERENCES_PHONE, ""));
+                    phoneNumberField.setText(Settings.getString(OneFragment.APP_PREFERENCES_PHONE, ""));
                 }
             }
         };
-        phone_number_label.setOnClickListener(phone_number_listener);
+        phoneNumberLabel.setOnClickListener(phoneNumberListener);
 
-        return root_view;
+        return rootView;
     }
 
     /*                                 VALIDATION BLOCK                                           */
 
-    private boolean check_information() {                       // Complex validation for whole form
-        boolean check_list = true;
+    private boolean checkInformation() {                       // Complex validation for whole form
+        boolean checkList = true;
 
-        final String lastname = lastname_field.getText().toString();
+        final String lastname = lastnameField.getText().toString();
         if (!isValidLastname(lastname)) {
-            lastname_field.setError("Неправильний формат!");
-            check_list = false;
+            lastnameField.setError("Неправильний формат!");
+            checkList = false;
         }
 
-        final String phone_number = phone_number_field.getText().toString();
-        if (!isValidPhoneNumber(phone_number)) {
-            phone_number_field.setError("Невірний формат номеру!");
-            check_list = false;
+        final String phoneNumber = phoneNumberField.getText().toString();
+        if (!isValidPhoneNumber(phoneNumber)) {
+            phoneNumberField.setError("Невірний формат номеру!");
+            checkList = false;
         }
 
-        final String theme = theme_field.getText().toString();
+        final String theme = themeField.getText().toString();
         if (!isValidMessage(theme)) {
-            theme_field.setError("Порожнє поле!");
-            check_list = false;
+            themeField.setError("Порожнє поле!");
+            checkList = false;
         }
 
         if (!isValidLocation()) {
-            location_field.setError("Місцеположення не визначено!");
-            check_list = false;
+            locationField.setError("Місцеположення не визначено!");
+            checkList = false;
         }
 
-        final String message = message_field.getText().toString();
+        final String message = messageField.getText().toString();
         if (!isValidMessage(message)) {
-            message_field.setError("Порожнє поле!");
-            check_list = false;
+            messageField.setError("Порожнє поле!");
+            checkList = false;
         }
 
-        return check_list;
+        return checkList;
     }
 
     private boolean isValidLastname(String lastname) {  // Checking lastname with pattern and ukrainian, russian and english characters
@@ -248,8 +247,8 @@ public class TwoFragment extends Fragment {
         return matcher.matches() && lastname.length() >= 5;
     }
 
-    private boolean isValidPhoneNumber(String phone_number) {   // Validation phone field with international format
-        return PhoneNumberUtils.isGlobalPhoneNumber(phone_number) && phone_number.length() > 12;
+    private boolean isValidPhoneNumber(String phoneNumber) {   // Validation phone field with international format
+        return PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber) && phoneNumber.length() > 12;
     }
 
     private boolean isValidLocation() {      // Checking location field
@@ -265,6 +264,32 @@ public class TwoFragment extends Fragment {
                     = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public void resetForm() {
+        lastnameField.getText().clear();
+        lastnameField.setError(null);
+
+        phoneNumberField.getText().clear();
+        phoneNumberField.setText("+380");
+        phoneNumberField.setError(null);
+
+        themeField.getText().clear();
+        themeField.setError(null);
+
+        locationField.getText().clear();
+        locationField.setError(null);
+        locationField.setEnabled(true);
+
+        messageField.getText().clear();
+        messageField.setError(null);
+
+        latitude = 0.0;
+        longitude = 0.0;
+
+        isCoordinatesReceived = false;
+
+        locationButton.setBackgroundResource(R.color.listen_location_button_color);
     }
 
     /*                                   DATA MANAGEMENT BLOCK                                    */
@@ -305,18 +330,20 @@ public class TwoFragment extends Fragment {
                 .post(body)
                 .build();
 
-        String response_string;
+        String responseString;
         try {
             okhttp3.Response response = client.newCall(request).execute();
-            response_string = response.body().string();
+            responseString = response.body().string();
         } catch (IOException e) {
-            response_string = "IO Error";
+            responseString = "IO Error";
         }
-        return response_string;
+        return responseString;
     }
 
+    /*                                   GEO LOCATION SERVICES                                    */
+
     private void getLatLongFromAddress(String address)  {   // Translating street name to coordinates
-        Locale locale = new Locale("uk_UA");
+        Locale locale = new Locale("ukUA");
         Locale.setDefault(locale);
         Geocoder geoCoder = new Geocoder(getContext(), Locale.getDefault());
         try {
@@ -327,16 +354,17 @@ public class TwoFragment extends Fragment {
             }
         }
         catch(Exception e) {
-            Toast.makeText(getContext(), "Помилка з'єднання з сервісом Google Geocoder", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Помилка з'єднання з сервісом Google Geocoder",
+                    Toast.LENGTH_SHORT).show();
         }
 
         if (longitude != 0.0 && latitude != 0.0) {
             isCoordinatesReceived = true;
-            location_button.setBackgroundResource(R.color.success_location_button_color);
-            location_field.setError(null);
+            locationButton.setBackgroundResource(R.color.success_location_button_color);
+            locationField.setError(null);
         } else {
             Toast.makeText(getContext(), "Не вдалося визначити адресу!", Toast.LENGTH_SHORT).show();
-            location_button.setBackgroundResource(R.color.failed_location_button_color);
+            locationButton.setBackgroundResource(R.color.failed_location_button_color);
         }
 
     }
@@ -344,8 +372,9 @@ public class TwoFragment extends Fragment {
     public static Address getAddress(final Context context,
                                     final double latitude,
                                     final double longitude) {
-        if (latitude == 0d || longitude == 0d)
+        if (latitude == 0d || longitude == 0d) {
             return null;
+        }
 
         final Geocoder geocoder = new Geocoder(context);
         final List<Address> addresses;
@@ -355,10 +384,11 @@ public class TwoFragment extends Fragment {
         } catch (IOException e) {
             return null;
         }
-        if (addresses != null && !addresses.isEmpty())
+        if (addresses != null && !addresses.isEmpty()) {
             return addresses.get(0);
-        else
+        } else {
             return null;
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -366,44 +396,20 @@ public class TwoFragment extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 Toast.makeText(getContext(), "Місцезнаходження визначено!", Toast.LENGTH_SHORT).show();
 
-                longitude = data.getDoubleExtra(GPSActivity.fetched_longitude, 0);
-                latitude = data.getDoubleExtra(GPSActivity.fetched_latitude, 0);
+                longitude = data.getDoubleExtra(GPSActivity.fetchedLongitude, 0);
+                latitude = data.getDoubleExtra(GPSActivity.fetchedLatitude, 0);
 
-                location_button.setBackgroundResource(R.color.success_location_button_color);
-                Address located_address = getAddress(getContext(),latitude, longitude);
-                location_field.setText(located_address.getAddressLine(1) + ", " + located_address.getAddressLine(0));
-                location_field.setError(null);
+                locationButton.setBackgroundResource(R.color.success_location_button_color);
+                Address locatedAddress = getAddress(getContext(),latitude, longitude);
+                locationField.setText(MessageFormat.format("{0}, {1}",
+                        locatedAddress.getAddressLine(1),
+                        locatedAddress.getAddressLine(0)));
 
+                locationField.setError(null);
                 isCoordinatesReceived = true;
             } else {
                 Toast.makeText(getContext(), "Місцезнаходження не визначено!", Toast.LENGTH_SHORT).show();
-                location_button.setBackgroundResource(R.color.failed_location_button_color);
+                locationButton.setBackgroundResource(R.color.failed_location_button_color);
             }
-    }
-
-    public void resetForm() {
-        lastname_field.getText().clear();
-        lastname_field.setError(null);
-
-        phone_number_field.getText().clear();
-        phone_number_field.setText("+380");
-        phone_number_field.setError(null);
-
-        theme_field.getText().clear();
-        theme_field.setError(null);
-
-        location_field.getText().clear();
-        location_field.setError(null);
-        location_field.setEnabled(true);
-
-        message_field.getText().clear();
-        message_field.setError(null);
-
-        latitude = 0.0;
-        longitude = 0.0;
-
-        isCoordinatesReceived = false;
-
-        location_button.setBackgroundResource(R.color.listen_location_button_color);
     }
 }

@@ -44,7 +44,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
-            android:name=".activity.ClaimResaultActivity"
+            android:name=".activity.ClaimResultActivity"
             android:label="@string/title_activity_claim_resault"
             android:theme="@style/MyMaterialTheme" />
         <activity

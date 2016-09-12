@@ -22,19 +22,19 @@ public class ClaimResultActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
 
-        TextView result_string = (TextView) findViewById(R.id.result_label);
+        TextView resultString = (TextView) findViewById(R.id.result_label);
         TextView phone = (TextView) findViewById(R.id.phone_label);
         TextView claim = (TextView) findViewById(R.id.claim_label);
 
-        result_string.setText(b.getString("result"));
+        resultString.setText(b.getString("result"));
         claim.setText(b.getString("claim"));
         phone.setText(b.getString("phone"));
 
-        Button back_button = (Button) findViewById(R.id.return_result_button);
-        back_button.setBackgroundColor(b.getInt("button_color"));
-        back_button.setText("ПОВЕРНУТИСЯ");
+        Button backButton = (Button) findViewById(R.id.return_result_button);
+        backButton.setBackgroundColor(b.getInt("buttonColor"));
+        backButton.setText("ПОВЕРНУТИСЯ");
 
-        back_button.setOnClickListener(new Button.OnClickListener() {
+        backButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 finish();
             }

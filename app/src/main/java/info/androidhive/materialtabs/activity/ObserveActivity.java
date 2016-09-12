@@ -25,32 +25,32 @@ public class ObserveActivity extends AppCompatActivity {
         setContentView(R.layout.activity_observe);
 
         Bundle b = getIntent().getExtras();
-        String claim_id = b.getString("claim_id");
+        String claimId = b.getString("claimId");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Заява №" + claim_id);
+        toolbar.setTitle("Заява №" + claimId);
         toolbar.setNavigationIcon(R.drawable.ic_save);
         setSupportActionBar(toolbar);
 
-        TextView claim_header   = (TextView) findViewById(R.id.claim_number);
-        TextView theme_text     = (TextView) findViewById(R.id.theme_text);
-        TextView message_text   = (TextView) findViewById(R.id.message_text);
+        TextView claimHeader   = (TextView) findViewById(R.id.claim_number);
+        TextView themeText     = (TextView) findViewById(R.id.theme_text);
+        TextView messageText   = (TextView) findViewById(R.id.message_text);
 
-        TextView theme_label    = (TextView) findViewById(R.id.theme_label);
-        TextView message_label  = (TextView) findViewById(R.id.message_label);
+        TextView themeLabel    = (TextView) findViewById(R.id.theme_label);
+        TextView messageLabel  = (TextView) findViewById(R.id.message_label);
 
         try {
-            List<Claim> claim_list = Claim.findWithQuery(Claim.class, "select * from Claim where claimid = ?", claim_id);
-            Claim claim = claim_list.get(0);
+            List<Claim> claimList = Claim.findWithQuery(Claim.class, "select * from Claim where claimid = ?", claimId);
+            Claim claim = claimList.get(0);
 
             ImageView map = (ImageView) findViewById(R.id.map_img);
 
             DisplayMetrics metrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-            claim_header.setText("Заява №" + claim_id);
-            theme_text.setText(claim.theme);
-            message_text.setText(claim.text);
+            claimHeader.setText(String.format("Заява №%s", claimId));
+            themeText.setText(claim.theme);
+            messageText.setText(claim.text);
 
             Picasso.with(getBaseContext())
                     .load("https://maps.googleapis.com/maps/api/staticmap?center=" + claim.latitude +
@@ -60,9 +60,9 @@ public class ObserveActivity extends AppCompatActivity {
                     .error(R.mipmap.ic_map)
                     .into(map);
         } catch (Exception e) {
-            claim_header.setText("Помилка");
-            theme_label.setText("Заяву не знайдено!");
-            message_label.setText("");
+            claimHeader.setText("Помилка");
+            themeLabel.setText("Заяву не знайдено!");
+            messageLabel.setText("");
         }
     }
 }
