@@ -42,6 +42,7 @@ public class ThreeFragment extends Fragment{
         emergencyButton.setOnClickListener(listener);
         return rootView;
     }
+
     public void onMakeCallButtonClick() {
         Intent makeCall = new Intent(Intent.ACTION_CALL, Uri.fromParts("tel", TEST_NUMBER, null));
         try {

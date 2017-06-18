@@ -34,7 +34,6 @@ public class OneFragment extends Fragment{
 
     private SharedPreferences Settings;
 
-
     private EditText lastnameSettings;
     private EditText phoneNumberSettings;
 
@@ -56,7 +55,7 @@ public class OneFragment extends Fragment{
         phoneNumberSettings        = (EditText) rootView.findViewById(R.id.phone_number_settings);
 
         RadioButton GPSbutton      = (RadioButton) rootView.findViewById(R.id.radio_button_gps);
-        RadioButton INTERNETbutton = (RadioButton) rootView.findViewById(R.id.radio_button_gps);
+        RadioButton INTERNETbutton = (RadioButton) rootView.findViewById(R.id.radio_button_internet);
 
         final ListView claimsList = (ListView) rootView.findViewById(R.id.old_claims_list);
 

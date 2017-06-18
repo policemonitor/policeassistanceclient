@@ -43,6 +43,7 @@ import okhttp3.RequestBody;
 
 
 public class TwoFragment extends Fragment {
+    private final String urlAddress = "http://192.168.1.14:3000";
 
     private SharedPreferences Settings;
 
@@ -322,7 +323,7 @@ public class TwoFragment extends Fragment {
         OkHttpClient client = new OkHttpClient();
 
         RequestBody body = RequestBody.create(JSON, mainObject.toString());
-        String url = "http://192.168.1.12:3000/API";
+        String url = urlAddress + "/api/new_claim";
         Request request = new Request.Builder()
                 .addHeader("Content-Type","application/json")
                 .addHeader("Accept", "application/json")
