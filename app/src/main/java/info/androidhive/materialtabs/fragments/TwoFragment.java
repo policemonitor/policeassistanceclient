@@ -402,9 +402,16 @@ public class TwoFragment extends Fragment {
 
                 locationButton.setBackgroundResource(R.color.success_location_button_color);
                 Address locatedAddress = getAddress(getContext(),latitude, longitude);
-                locationField.setText(MessageFormat.format("{0}, {1}",
-                        locatedAddress.getAddressLine(1),
-                        locatedAddress.getAddressLine(0)));
+
+                try {
+                    locationField.setText(MessageFormat.format("{0}, {1}",
+                            locatedAddress.getAddressLine(1),
+                            locatedAddress.getAddressLine(0)));
+                } catch (RuntimeException e) {
+                    locationField.setText("Місцеположення встановлене");
+                }
+
+
 
                 locationField.setError(null);
                 isCoordinatesReceived = true;

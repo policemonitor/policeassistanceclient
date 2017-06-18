@@ -90,6 +90,15 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);          // Set default coordinates provider - Network
             Toast.makeText(this, "Джерело інформації: Інтернет", Toast.LENGTH_SHORT).show();
         }
+
+        if (location == null)
+        {
+            location = new Location("");
+            location.setLatitude(50.4395455);
+            location.setLongitude(30.4423367);
+
+        }
+
         //                  Setting up screen
 
         startupMap();
